@@ -5,7 +5,6 @@ docs/assets/Textures/**
 docs/assets/Models/**
 m3studio-main
 .vscode
-package-lock.json
 ToDo.md
 docs/dist/**
 .claude
