@@ -426,7 +426,7 @@ window.addEventListener('popstate', async (e) => {
       }
     } else {
       localSearch.value = `${p.race}/${p.unit}`;
-      await loadModel(`./assets/Units/${p.race}/${p.unit}.m3`, {
+      await loadModel(`./assets/Models/${p.race}/${p.unit}.m3`, {
         textureBasePath: './assets/Textures',
         onTextureMissing: async (filename, mat) => {
           if (!filename) return;
@@ -472,7 +472,7 @@ function populateLocalDropdown(query) {
     btn.addEventListener('click', () => {
       localSearch.value = item.displayName;
       localDropdown.style.display = 'none';
-      currentModelUrl = `./assets/Units/${item.folder}/${item.model}.m3`;
+      currentModelUrl = `./assets/Models/${item.folder}/${item.model}.m3`;
       triggerLoad();
     });
     localDropdown.appendChild(btn);
@@ -977,7 +977,7 @@ async function triggerLoad() {
       const localModel = getCurrentLocalModel();
       if (!localModel) return;
       setUrlParams({ src: 'local', race: localModel.folder, unit: localModel.model }, localModel.model);
-      await loadModel(`./assets/Units/${localModel.folder}/${localModel.model}.m3`, {
+      await loadModel(`./assets/Models/${localModel.folder}/${localModel.model}.m3`, {
         textureBasePath: './assets/Textures',
         onTextureMissing: async (filename, mat) => {
           if (!filename) return;

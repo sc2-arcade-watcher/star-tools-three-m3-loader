@@ -1,7 +1,8 @@
 node_modules/
 build/
 *.glb
-demo/assets
+docs/assets/Textures/**
+docs/assets/Models/**
 m3studio-main
 .vscode
 package-lock.json
