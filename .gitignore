@@ -1,0 +1,9 @@
+node_modules/
+build/
+*.glb
+demo/assets
+m3studio-main
+.vscode
+package-lock.json
+ToDo.md
+.claude

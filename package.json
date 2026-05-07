@@ -1,0 +1,31 @@
+{
+  "name": "m3-viewer-threejs",
+  "version": "1.0.0",
+  "description": "Browser viewer and Node.js converter for StarCraft II / C&C3 M3 model files, built on Three.js",
+  "main": "convert-m3.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/convert.test.js",
+    "convert": "node convert-m3.js",
+    "screenshot": "node screenshot-m3.js",
+    "serve": "npx serve . -l 8000"
+  },
+  "keywords": [
+    "m3",
+    "starcraft",
+    "cnc3",
+    "3d",
+    "threejs",
+    "glb",
+    "gltf",
+    "model-viewer",
+    "game-modding"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "canvas": "^3.2.3",
+    "gl": "^8.1.6",
+    "three": "^0.161.0",
+    "xmldom": "^0.6.0"
+  }
+}

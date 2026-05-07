@@ -1,0 +1,173 @@
+    body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; background: #111; color: #eee; }
+    #ui { position: absolute; top: 12px; left: 12px; right: 12px; z-index: 10; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    select, button, input { padding: 8px 10px; border-radius: 6px; border: 1px solid #444; background: #222; color: #eee; }
+    input { width: 260px; }
+    button { cursor: pointer; }
+    button.active { background: #446; border-color: #88a; }
+    #local-ui, #github-ui { display: flex; gap: 8px; align-items: center; }
+    #github-ui { display: none; }
+    canvas { display: block; }
+
+    /* GitHub search dropdown */
+    #gh-search-container { position: relative; }
+    /* Shared dropdown styles for GitHub and Local search */
+    #gh-search-container, #local-search-container { position: relative; }
+    .dropdown-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(20,20,20,.95);
+        border: 1px solid #444;
+        border-radius: 6px;
+        max-height: 200px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #484860 transparent;
+        display: none;
+        z-index: 100;
+        box-shadow: 0 4px 12px rgba(0,0,0,.5);
+    }
+    .dropdown-item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 8px 12px;
+        background: none;
+        border: none;
+        color: #ccc;
+        font-size: .82rem;
+        cursor: pointer;
+        border-radius: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .dropdown-item:hover { background: #2a2a3a; }
+    .dropdown-item.active { color: #88ccff; background: #1a2a3a; }
+
+    /* Map old IDs/classes to new shared classes for compatibility */
+    #gh-dropdown, #local-dropdown { composes: dropdown-list; }
+    .gh-dropdown-item, .local-dropdown-item { composes: dropdown-item; }
+
+    /* Bottom chrome */
+    #status  { position: absolute; bottom: 14px; left: 14px; font-size: .82rem; color: #aaa; z-index: 10; pointer-events: none; }
+    #credits { position: absolute; bottom: 14px; right: 14px; color: #666; font-size: .78rem; z-index: 10; }
+    #credits a { color: #666; }
+
+    /* Bottom action bar */
+    #action-bar { position: absolute; bottom: 38px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10; }
+    .action-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; border: 1px solid #444; background: rgba(30,30,30,.9); color: #ddd; font-size: .82rem; cursor: pointer; backdrop-filter: blur(4px); transition: background .15s, border-color .15s; }
+    .action-btn:hover { background: rgba(60,60,80,.95); border-color: #666; }
+    .action-btn:disabled { opacity: .4; cursor: default; }
+    .action-btn svg { flex-shrink: 0; }
+    .action-sep { width: 1px; height: 24px; background: #444; margin: 0 2px; align-self: center; }
+
+    /* Right-side panel stack */
+    #right-panels { position: absolute; top: 60px; right: 12px; width: 230px; display: flex; flex-direction: column; gap: 8px; z-index: 10; max-height: calc(100vh - 100px); overflow-y: auto; overflow-x: hidden; }
+    .side-panel { background: rgba(20,20,20,.88); border: 1px solid #444; border-radius: 8px; overflow: hidden; display: none; flex-shrink: 0; }
+    .side-panel .panel-header { padding: 8px 12px; font-size: .85rem; font-weight: bold; color: #ccc; background: #1e1e1e; cursor: pointer; user-select: none; display: flex; justify-content: space-between; }
+    .side-panel .panel-list { max-height: 260px; overflow-y: auto; padding: 4px 0; }
+    .side-panel .panel-list button:not(.tree-toggle):not(.tree-name-btn) { display: block; width: 100%; text-align: left; padding: 5px 12px; background: none; border: none; color: #ccc; font-size: .82rem; cursor: pointer; border-radius: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .side-panel .panel-list button:not(.tree-toggle):not(.tree-name-btn):hover { background: #2a2a3a; }
+    .side-panel .panel-list button:not(.tree-toggle):not(.tree-name-btn).active { color: #88ccff; background: #1a2a3a; }
+    .side-panel .panel-list .empty { padding: 8px 12px; color: #666; font-size: .82rem; }
+    .side-panel .panel-list.active { background: rgba(255,255,68,.04); }
+    .side-panel .panel-list[style*="cursor"]:hover { background: rgba(255,255,255,.03); }
+    .bounds-row { display: flex; justify-content: space-between; padding: 3px 12px; font-size: .80rem; }
+    .bounds-label { color: #888; }
+    .bounds-value { color: #ccc; font-variant-numeric: tabular-nums; }
+
+    .anim-tag { float: right; font-size: .72rem; color: #888; margin-left: 4px; }
+    .vol-tag { float: right; font-size: .70rem; color: #777; margin-left: 4px; }
+
+    /* Expandable tree */
+    .tree-row { display: flex; align-items: stretch; padding: 0 6px 0 8px; min-height: 26px; }
+    .tree-toggle { width: 16px; height: 16px; flex-shrink: 0; align-self: center; background: none; border: 1px solid #555; border-radius: 3px; color: #888; font-size: .72rem; cursor: pointer; padding: 0; line-height: 1; margin-right: 5px; display: inline-flex; align-items: center; justify-content: center; transition: border-color .15s, color .15s; }
+    .tree-toggle:hover { border-color: #88a; color: #aac; }
+    .tree-toggle-ph { width: 16px; flex-shrink: 0; align-self: center; margin-right: 5px; }
+    .tree-label { color: #bbb; font-size: .82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; align-self: center; }
+    .tree-name-btn { background: none; border: none; color: #ccc; font-size: .82rem; cursor: pointer; text-align: left; padding: 0 4px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 3px; display: flex; align-items: center; }
+    .tree-name-btn:hover { background: #2a2a3a; }
+    .tree-name-btn.active { color: #88ccff; }
+    .tree-children { padding-left: 21px; }
+
+    /* Texture thumbnail rows */
+    .tree-tex-row { display: flex; align-items: center; padding: 3px 6px 3px 0; gap: 6px; }
+    .tex-thumb { width: 36px; height: 36px; border-radius: 3px; object-fit: cover; flex-shrink: 0; background: #1a1a2a; border: 1px solid #333; }
+    .tree-tex-info { display: flex; flex-direction: column; overflow: hidden; }
+    .tex-label { color: #666; font-size: .70rem; }
+    .tex-name { color: #888; font-size: .75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Texture viewer — draggable floating panel, no backdrop */
+    #tex-modal { display: none; position: fixed; z-index: 200; }
+    #tex-modal.open { display: block; }
+    #tex-box { background: rgba(18,18,24,.97); border: 1px solid #555; border-radius: 10px; width: 400px; max-width: 95vw; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,.7); backdrop-filter: blur(6px); }
+    #tex-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,.04); border-bottom: 1px solid #333; cursor: grab; user-select: none; }
+    #tex-header:active { cursor: grabbing; }
+    #tex-title { font-size: .82rem; color: #bbb; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; margin-right: 8px; }
+    #tex-close { background: none; border: none; color: #777; font-size: .9rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+    #tex-close:hover { color: #fff; background: #333; }
+    #tex-preview-wrap { background: repeating-conic-gradient(#252525 0% 25%, #1c1c1c 0% 50%) 0 0 / 14px 14px; display: flex; align-items: center; justify-content: center; min-height: 160px; max-height: 320px; overflow: hidden; }
+    #tex-preview { max-width: 100%; max-height: 320px; object-fit: contain; display: block; }
+    #tex-actions { display: flex; gap: 5px; padding: 8px 10px; border-top: 1px solid #2a2a2a; flex-wrap: wrap; }
+    .tex-btn { flex: 1; min-width: 80px; padding: 6px 8px; background: #1e1e2e; border: 1px solid #444; border-radius: 6px; color: #ccc; font-size: .78rem; cursor: pointer; text-align: center; }
+    .tex-btn:hover { background: #2a2a3e; border-color: #666; }
+    #tex-gh-search { padding: 0 10px 8px; border-top: 1px solid #2a2a2a; }
+    #tex-gh-input { width: 100%; box-sizing: border-box; margin-top: 8px; padding: 6px 10px; background: #161626; border: 1px solid #444; border-radius: 6px; color: #eee; font-size: .80rem; }
+    #tex-gh-results { max-height: 160px; overflow-y: auto; margin-top: 4px; }
+    #tex-gh-results button { display: block; width: 100%; text-align: left; padding: 4px 8px; background: none; border: none; border-radius: 4px; color: #bbb; font-size: .78rem; cursor: pointer; }
+    #tex-gh-results button:hover { background: #2a2a3a; }
+    /* Unified custom scrollbar for all scrollable containers */
+    #right-panels,
+    .dropdown-list,
+    .side-panel .panel-list,
+    #tex-gh-results {
+        scrollbar-width: thin;
+        scrollbar-color: #484860 transparent;
+    }
+    #right-panels::-webkit-scrollbar,
+    .dropdown-list::-webkit-scrollbar,
+    .side-panel .panel-list::-webkit-scrollbar,
+    #tex-gh-results::-webkit-scrollbar {
+        width: 5px;
+    }
+    #right-panels::-webkit-scrollbar-track,
+    .dropdown-list::-webkit-scrollbar-track,
+    .side-panel .panel-list::-webkit-scrollbar-track,
+    #tex-gh-results::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    #right-panels::-webkit-scrollbar-thumb,
+    .dropdown-list::-webkit-scrollbar-thumb,
+    .side-panel .panel-list::-webkit-scrollbar-thumb,
+    #tex-gh-results::-webkit-scrollbar-thumb {
+        background: #484860;
+        border-radius: 3px;
+    }
+    #right-panels::-webkit-scrollbar-thumb:hover,
+    .dropdown-list::-webkit-scrollbar-thumb:hover,
+    .side-panel .panel-list::-webkit-scrollbar-thumb:hover,
+    #tex-gh-results::-webkit-scrollbar-thumb:hover {
+        background: #7070b0;
+    }
+
+    /* Clickable texture thumbnail + selected highlight */
+    .tex-thumb { cursor: pointer; transition: opacity .15s, border-color .15s; }
+    .tex-thumb:hover { opacity: .75; }
+    .tree-tex-row { cursor: pointer; border-radius: 4px; transition: background .12s; }
+    .tree-tex-row:hover { background: rgba(255,255,255,.04); }
+    .tree-tex-row.active { background: rgba(100,140,220,.15); }
+    .tree-tex-row.active .tex-thumb { border-color: #5588cc; }
+    .tree-tex-row.active .tex-name { color: #88bbff; }
+
+    /* Auth modal */
+    #auth-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100; align-items: center; justify-content: center; }
+    #auth-modal.open { display: flex; }
+    #auth-box { background: #1e1e1e; border: 1px solid #444; border-radius: 12px; padding: 32px; max-width: 420px; width: 90%; text-align: center; }
+    #auth-box h2 { margin: 0 0 12px; font-size: 1.2rem; }
+    #auth-box p { color: #aaa; font-size: .9rem; margin: 0 0 20px; line-height: 1.5; }
+    #auth-code { font-size: 2rem; font-weight: bold; letter-spacing: .3em; color: #fff; background: #111; border-radius: 8px; padding: 12px 24px; display: inline-block; margin-bottom: 20px; }
+    #auth-open { display: inline-block; padding: 10px 24px; background: #238636; border: none; border-radius: 6px; color: #fff; font-size: 1rem; cursor: pointer; text-decoration: none; margin-bottom: 16px; }
+    #auth-cancel { background: none; border: 1px solid #555; color: #aaa; font-size: .85rem; }
+    #auth-waiting { color: #888; font-size: .85rem; margin-top: 12px; }
