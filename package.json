@@ -5,6 +5,8 @@
   "main": "convert-m3.js",
   "type": "module",
   "scripts": {
+    "build": "node scripts/embed-simple.js",
+    "precommit": "npm run build",
     "test": "node --test test/convert.test.js",
     "convert": "node convert-m3.js",
     "screenshot": "node screenshot-m3.js",

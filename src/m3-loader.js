@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+const STRUCTURES_XML_EMBEDDED = `<xml>...</xml>`;
 const isNode = typeof process !== 'undefined' && process.versions?.node != null;
 
 let fs, path, __dirnameNode, GLTFExporter, DOMParser;
@@ -303,14 +303,12 @@ export class M3SectionList extends Array {
     this.model = null;
   }
 
-  static async load(arrayBuffer, structuresXml) {
+  static async load(arrayBuffer) {
     let xmlText;
-    if (typeof structuresXml === 'string' && structuresXml.trim().startsWith('<')) {
-      xmlText = structuresXml;
-    } else if (isNode) {
-      xmlText = fs.readFileSync(structuresXml, 'utf8');
+    if (isNode) {
+      xmlText = fs.readFileSync(path.join(__dirnameNode, './structures.xml'), 'utf8');
     } else {
-      xmlText = await fetch(structuresXml).then((r) => r.text());
+      xmlText = STRUCTURES_XML_EMBEDDED;
     }
     await loadM3StructuresXml(xmlText);
 
@@ -1061,13 +1059,11 @@ export function buildTurrets(model, sections) {
 
 // ── Node.js only ──────────────────────────────────────────────────────────────
 
-export async function loadM3FromFile(filePath, structuresXmlPath) {
+export async function loadM3FromFile(filePath) {
   if (!isNode) throw new Error('loadM3FromFile is only available in Node.js');
-  const xmlPath = structuresXmlPath ?? path.join(__dirnameNode, '..', 'm3studio-main', 'structures.xml');
   const buffer = fs.readFileSync(filePath);
   const arrayBuffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
-  const structuresXml = fs.readFileSync(xmlPath, 'utf8');
-  return await M3SectionList.load(arrayBuffer, structuresXml);
+  return await M3SectionList.load(arrayBuffer);
 }
 
 export async function exportToGLB(group, outputPath) {

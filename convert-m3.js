@@ -1,6 +1,6 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { loadM3FromFile, buildThreeMeshesFromModel, exportToGLB, structures } from './src/m3-loader.js';
+import { loadM3FromFile, buildThreeMeshesFromModel, exportToGLB, structures } from './dist/m3-loader.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

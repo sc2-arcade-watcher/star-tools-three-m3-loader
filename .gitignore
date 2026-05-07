@@ -7,4 +7,9 @@ m3studio-main
 .vscode
 package-lock.json
 ToDo.md
+docs/dist/**
 .claude
+# Игнорировать временные файлы
+*.tmp
+*.log
+.DS_Store

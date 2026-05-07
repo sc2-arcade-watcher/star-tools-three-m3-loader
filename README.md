@@ -165,4 +165,27 @@ Key details:
 
 ## Credits
 
-M3 structure definitions and import reference from [m3studio](https://github.com/Solstice245/m3studio) by Solstice245 and contributors, licensed under GPL-2.0.
+Inspired by [m3studio](https://github.com/Solstice245/m3studio) by Solstice245 and contributors, licensed under GPL-2.0.
+
+Credits for gathering information about the m3 file format go to:
+* Florian Köberle - who created the first version of this file by using existing descriptions of the m3 file format
+* NiNtoxicated (madyavic@gmail.com) - who made an m3 Exporter and Importer for 3ds max
+* Leruster (leruster@gmail.com) - who helped improving the structure.xml file
+* Witchsong (http://code.google.com/p/libm3/) - who made a M3 library and helped NiNtoxicated on sequence data
+* Teal (starcraft.incgamers.com) - who made an PHP M3 parser
+* Blue Isle Studios (http://blueislestudios.com/) - who helped NiNtoxicated
+* Volcore (http://volcore.limbicsoft.com/) - who helped NiNtoxicated figure out vertex flags
+* Sixen (http://www.sc2mapster.com/) - who provided NiNtoxicated with a good central resource for SC2 tools
+* der_Ton (http://www.doom3world.org/) - who worked on the MD5 format which is similar to M3
+* MrMoonKr - who provided NiNtoxicated a toUpper function to fix 3ds max incompatibility issues
+* Skizot - who helped NiNtoxicated with testing and providing suggestions to improve the script
+* Phygit - who provided NiNtoxicated with bug fixes and development information to do with the M3 format
+* ufoZ - who was One of the original people to reverse engineer the M2 format and to make a good maxscript importer from which NiNtoxicated importer/exporters were originally based
+* The SC2Mapster community (http://www.sc2mapster.com/) - who also collected information about m3 in the wiki: http://www.sc2mapster.com/wiki/sc2-api/game-files/models/model-header/
+* CaptainD001 - https://github.com/CaptainD001/M3_Import
+* Talv - who helped improving the structure.xml file
+* TangorCraft - who created the M3 Editor (https://github.com/tangorcraft/m3editor/) - which was very useful for decoding m3 structures
+* Solstice245 (sc2solstice245@gmail.com) - who helped improving the structure.xml file
+* Renee - who helped improving the structure.xml file and documented the existance of some section types
+
+Please give credit to these people if you use the xml or the (generated) code in your own scripts.

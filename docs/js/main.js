@@ -1,4 +1,4 @@
-import { M3SectionList, buildThreeMeshesFromModel, buildAnimationClips, buildAttachmentPoints, buildMaterialList, buildBoneHierarchy, buildHitVolumes, buildLights, buildTurrets, buildBounds, getModelTextureFilenames } from '../../src/m3-loader.js';
+import { M3SectionList, buildThreeMeshesFromModel, buildAnimationClips, buildAttachmentPoints, buildMaterialList, buildBoneHierarchy, buildHitVolumes, buildLights, buildTurrets, buildBounds, getModelTextureFilenames } from './../dist/m3-loader.js';
 import JSZip from 'jszip';
 import * as THREE from 'three';
 import { OrbitControls } from '../lib/three/OrbitControls.js';
