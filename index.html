@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="M3 Viewer Demo - View and export Star Craft 2 M3 models">
+  <meta name="author" content="star-assets">
+  <title>M3 Viewer Demo</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./lib/three/three.js",
+      "jszip": "./lib/jszip.esm.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="ui">
+    <button id="srcLocal" class="active">Local</button>
+    <button id="srcGithub">GitHub</button>
+
+    <div id="local-ui">
+      <div id="local-search-container">
+        <input id="localSearch" type="text" placeholder="Search local model…" autocomplete="off">
+        <div id="local-dropdown" class="dropdown-list"></div>
+      </div>
+    </div>
+
+    <div id="github-ui">
+      <button id="ghAuthBtn">Connect GitHub</button>
+      <div id="gh-search-container">
+        <input id="ghSearch" type="text" placeholder="Search model…" autocomplete="off">
+        <div id="gh-dropdown" class="dropdown-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom action bar -->
+  <div id="action-bar">
+    <button id="groundBtn" class="action-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="12" cy="18" rx="10" ry="4"/><path d="M5 15c0-3 3-6 7-6s7 3 7 6"/>
+      </svg>
+      Ground
+    </button>
+    <button id="gridBtn" class="action-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+      </svg>
+      Grid
+    </button>
+    <div class="action-sep"></div>
+    <button id="screenshotBtn" class="action-btn" disabled>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
+      </svg>
+      PNG
+    </button>
+    <button id="downloadBtn" class="action-btn" disabled>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/><polyline points="8 11 12 15 16 11"/>
+      </svg>
+      ZIP
+    </button>
+    <button id="exportBtn" class="action-btn" disabled>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      GLB
+    </button>
+  </div>
+
+  <div id="auth-modal">
+    <div id="auth-box">
+      <h2>Connect to GitHub</h2>
+      <p>Open the link below and enter this code to authorize the viewer. The index will load automatically once done.</p>
+      <div id="auth-code">––––––––</div><br>
+      <a id="auth-open" href="https://github.com/login/device" target="_blank">Open github.com/login/device</a><br>
+      <button id="auth-cancel">Cancel</button>
+      <div id="auth-waiting">Waiting for authorization…</div>
+    </div>
+  </div>
+
+  <!-- Texture viewer modal -->
+  <div id="tex-modal">
+    <div id="tex-box">
+      <div id="tex-header">
+        <span id="tex-title">Texture</span>
+        <button id="tex-close">✕</button>
+      </div>
+      <div id="tex-preview-wrap">
+        <img id="tex-preview" src="" alt="">
+      </div>
+      <div id="tex-actions">
+        <button id="tex-download" class="tex-btn">⬇ Download</button>
+        <label id="tex-local-label" class="tex-btn">📁 Load File<input id="tex-local-input" type="file" accept=".dds,.tga,.png,.jpg" style="display:none"></label>
+        <button id="tex-gh-btn" class="tex-btn">🔍 From GitHub</button>
+      </div>
+      <div id="tex-gh-search" style="display:none">
+        <input id="tex-gh-input" type="text" placeholder="Search texture…" autocomplete="off">
+        <div id="tex-gh-results"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="right-panels">
+    <div id="bounds-panel" class="side-panel">
+      <div class="panel-header"><span>Bounds</span><span id="bounds-toggle">▲</span></div>
+      <div id="bounds-list" class="panel-list"></div>
+    </div>
+    <div id="anim-panel" class="side-panel">
+      <div class="panel-header"><span>Animations</span><span id="anim-toggle">▲</span></div>
+      <div id="anim-list" class="panel-list"></div>
+    </div>
+    <div id="att-panel" class="side-panel">
+      <div class="panel-header"><span>Attachment Points</span><span id="att-toggle">▲</span></div>
+      <div id="att-list" class="panel-list"></div>
+    </div>
+    <div id="mat-panel" class="side-panel">
+      <div class="panel-header"><span>Materials</span><span id="mat-toggle">▲</span></div>
+      <div id="mat-list" class="panel-list"></div>
+    </div>
+    <div id="bone-panel" class="side-panel">
+      <div class="panel-header"><span>Bones</span><span id="bone-toggle">▲</span></div>
+      <div id="bone-list" class="panel-list"></div>
+    </div>
+    <div id="hit-panel" class="side-panel">
+      <div class="panel-header"><span>Hit Volumes</span><span id="hit-toggle">▲</span></div>
+      <div id="hit-list" class="panel-list"></div>
+    </div>
+    <div id="light-panel" class="side-panel">
+      <div class="panel-header"><span>Lights</span><span id="light-toggle">▲</span></div>
+      <div id="light-list" class="panel-list"></div>
+    </div>
+    <div id="turret-panel" class="side-panel">
+      <div class="panel-header"><span>Turrets</span><span id="turret-toggle">▲</span></div>
+      <div id="turret-list" class="panel-list"></div>
+    </div>
+  </div>
+
+  <span id="status">Ready</span>
+  <div id="credits">M3 Viewer — Three.js · <a href="https://github.com/star-assets">star-assets</a></div>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
